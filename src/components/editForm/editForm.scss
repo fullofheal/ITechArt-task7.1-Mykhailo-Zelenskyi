@@ -1,0 +1,17 @@
+.form {
+    input {
+        margin: 5px;
+    }
+    button {
+        margin: 5px;
+    }
+    &__label {
+        display: block;
+    }
+    &__instructions {
+        resize: none;
+        width: 550px;
+        height: 300px;
+        padding: 5px;
+    }
+}
