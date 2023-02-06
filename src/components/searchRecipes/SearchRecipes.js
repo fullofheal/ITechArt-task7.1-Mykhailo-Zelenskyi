@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import SearchActions from "../../store/actions/searchActions";
 import addRecipeActions from "../../store/actions/addRecipeActions";
@@ -12,7 +12,6 @@ const SearchRecipes = () => {
     const [searchInput, setSearchInput] = useState('');
     const [incorrect, setIncorrect] = useState(false);
     const meals = useSelector(state => state.searchReducer.searchResult.meals);
-    const state = useSelector(state => state.searchReducer);
     const {request} = getResultByCriteria();
     const dispatch = useDispatch();
 
@@ -114,7 +113,13 @@ const SearchRecipes = () => {
             {searchField(searchCriteria)}
             {incorrect && <div>Please use different keyword</div>}
             {meals && mealsList()}
-            <button type='submit' className="search__submit-btn">Search</button>
+            <div className="search__buttons">
+                <button type='submit' className="search__submit-btn">Search</button>
+                <button 
+                    type='button' 
+                    className="search__submit-btn"
+                    onClick={() => dispatch(addRecipeActions.addBlank())}>Fill out your own recipe</button>
+            </div>
         </form>
     )
 }

@@ -1,5 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
+// import React from 'react';
+// import ReactDOM from 'react-dom';
 import App from './components/app/App';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
@@ -9,9 +10,17 @@ const store = configureStore({
     reducer: rootReducer
 });
 
-ReactDOM.render(
+// ReactDOM.render(
+    // <Provider store={store}>
+    //     <App />
+    // </Provider>,
+//     document.getElementById('root'),
+// );
+
+const root = createRoot(document.getElementById('root'));
+
+root.render(
     <Provider store={store}>
         <App />
-    </Provider>,
-    document.getElementById('root'),
+    </Provider>
 );

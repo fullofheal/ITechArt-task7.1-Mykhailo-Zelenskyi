@@ -1,6 +1,5 @@
 const initialState = {
-    details: '',
-    id: '',
+    details: null,
     loading: false,
     error: null
 };
@@ -22,7 +21,22 @@ function addRecipeReducer(state = initialState, action) {
             return {
                 ...state,
                 error: true
-            }
+            };
+        case 'ADD_BLANK':
+            return {
+                ...state,
+                details: {
+                    id: '',
+                    country: '',
+                    category: '',
+                    instructions: '',
+                    name: '',
+                    tags: '',
+                    ingredients: [['','']],
+                    picture: '',
+                    video: ''
+                }
+            };
         default:
             return state;
     }

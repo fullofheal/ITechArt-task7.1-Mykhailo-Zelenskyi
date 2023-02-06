@@ -1,34 +1,51 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import RecipesActions from "../../store/actions/actions";
-import { useHttp } from "../../hooks/http.hook";
+import { Link } from "react-router-dom";
+import addRecipeActions from "../../store/actions/addRecipeActions";
 import './recipesList.scss';
 
 const RecipesList = () => {
 
     const {recipesList} = useSelector(state => state.localRecipesReducer);
     const dispatch = useDispatch();
+    const [searchInput, setSearchInput] = useState('');
 
-    const recipes = () => {
-        return recipesList.map((recipe, i) => {
+    const onChangeSearch = (e) => {
+        setSearchInput(e.target.value.toLowerCase())
+    }
+
+    const visibleRecipes = (recipes, searchInput) => {
+        if (searchInput.length === 0) {
+            return recipes
+        }
+
+        return recipes.filter(item => {
+            return item.name.toLowerCase().indexOf(searchInput) > -1 || item.tags.toLowerCase().indexOf(searchInput) > -1 || item.country.toLowerCase().indexOf(searchInput) > -1
+        })
+    }
+
+    const recipes = (list) => {
+        return list.map((recipe, i) => {
             return (
                 <div 
                     className="recipes__item"
                     key={recipe.id + i}>
-                    <img src={recipe.strMealThumb} alt={recipe.strMeal}/>
-                    <h3>{recipe.name}</h3>
-                    <h4>{recipe.instructions}</h4>
-                    <div className="recipes__ingredients">
-                        {recipe.ingredients.map((item, i) => {
-                            return <div 
-                                        className="recipes__ingredient"
-                                        key={item[0]+i}>
-                                        <div>{item[0]}</div>
-                                        <div>{item[1]}</div>
-                                    </div>
-                        })}
+                    <div className="recipes__picture">
+                        <img src={recipe.picture} alt={recipe.name}/>
                     </div>
-                    <button>View details / edit recipe</button>
+                    <h3>{recipe.name}</h3>
+                    <div className="recipes__tags">
+                        Tags: {recipe.tags}
+                    </div>
+                    <div className="recipes__country">
+                        Country of origin: {recipe.country}
+                    </div>
+                    <div className="recipes__buttons">
+                        <Link to={"/details"}>
+                            <button onClick={() => dispatch(addRecipeActions.addToDetails(recipe))}>View details / edit recipe</button>
+                        </Link>
+                        <button onClick={() => dispatch(addRecipeActions.removeFromLocal(recipe.id))}>Remove Recipe</button>
+                    </div>
                 </div>
             )
         })
@@ -36,7 +53,16 @@ const RecipesList = () => {
 
     return (
         <div className="recipes__list">
-            {recipesList.length > 0 && recipes()}
+            <h2>List of all added recipes</h2>
+            <input 
+                type="text"
+                className="recipes__search"
+                placeholder="Search by tags, name, or country of origin"
+                value={searchInput}
+                onChange={(e) => onChangeSearch(e)} />
+            {recipesList.length > 0 && <div className="recipes__wrapper">
+                {recipes(visibleRecipes(recipesList, searchInput))}
+            </div> }
         </div>
     )
 }

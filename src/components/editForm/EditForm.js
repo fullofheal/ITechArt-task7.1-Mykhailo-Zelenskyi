@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import addRecipeActions from "../../store/actions/addRecipeActions";
+import { useNavigate } from "react-router-dom";
 import './editForm.scss';
 
 const EditForm = (props) => {
@@ -8,6 +9,8 @@ const EditForm = (props) => {
     const {recipeDetails} = props;
 
     const [details, setDetails] = useState(recipeDetails);
+
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
@@ -30,15 +33,43 @@ const EditForm = (props) => {
         })
     }
 
+    const changeImgUrl = (e) => {
+        try {
+            setDetails({
+                ...details,
+                picture: e.target.value
+            })
+        }
+        catch {
+            console.log('please set correct image url')
+        }
+    }
+
+    const changeVideoUrl = (e) => {
+        setDetails({
+            ...details,
+            video: e.target.value
+        })
+    }
+
+    const displayVideo = () => {
+        const videoSrc = details.video.replace('watch?v=', 'embed/');
+        return <div>
+            <iframe width="560" height="315" src={videoSrc} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
+        </div>
+    }
+
     const submitRecipe = (e) => {
         e.preventDefault();
         dispatch(addRecipeActions.addToLocal(details));
-        console.log(e, details)
+        if (props) {
+            navigate("/");
+        }
     }
 
     const ingredientsList = (ingredients) => {
         return ingredients.map((ingredient, i) => {
-            return <div key={`ingredient${i+1}`}>
+            return <div key={`ingredient${i+1}`} className="form__ingredient">
                 <input 
                     required 
                     type="text"
@@ -83,17 +114,51 @@ const EditForm = (props) => {
         <form 
             className="form"
             onSubmit={(e) => submitRecipe(e)}>
-            <img src={recipeDetails.strMealThumb} alt={recipeDetails.strMeal}/>
+            <div className="form__picture">
+                <img src={details.picture} alt={details.name}/>
+                <label className="form__label" htmlFor="picture-url">Picture url</label>
+                <input 
+                type="text"
+                name='picture-url'
+                placeholder="Provide valid image url"
+                value={details.picture}
+                onChange={(e) => changeImgUrl(e)} />
+            </div>
             <label className="form__label" htmlFor="name">Name</label>
             <input 
                 required 
                 type="text" 
                 name='name' 
                 value={details.name}
+                placeholder="Recipe name"
                 onChange={(e) => {
                     setDetails({
                         ...details,
                         name: e.target.value
+                    })
+                }}/>
+            <label className="form__label" htmlFor="tags">Tags</label>
+            <input 
+                type="text" 
+                name='tags' 
+                value={details.tags}
+                placeholder="List associated tags"
+                onChange={(e) => {
+                    setDetails({
+                        ...details,
+                        tags: e.target.value
+                    })
+                }}/>
+            <label className="form__label" htmlFor="country">Country of origin</label>
+            <input 
+                type="text" 
+                name='country' 
+                value={details.country}
+                placeholder="List associated tags"
+                onChange={(e) => {
+                    setDetails({
+                        ...details,
+                        country: e.target.value
                     })
                 }}/>
             <label className="form__label" htmlFor="instructions">Instructions</label>
@@ -101,6 +166,7 @@ const EditForm = (props) => {
                 required
                 className="form__instructions"
                 name='instructions' 
+                placeholder="Provide detailed preparation instructions"
                 value={details.instructions}
                 onChange={(e) => {
                     setDetails({
@@ -116,7 +182,14 @@ const EditForm = (props) => {
                     Add new ingredient
                 </button>
             </div>
-            <button type="submit">Submit recipe</button>
+            <label className="form__label-video" htmlFor="video-url">Video url</label>
+            <input 
+                type="text" 
+                name="video-url"
+                value={details.video}
+                onChange={(e) => changeVideoUrl(e)}/>
+            {details.video ? displayVideo() : ''}
+                <button type="submit">Submit recipe</button>
         </form>
     )
 }

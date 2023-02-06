@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import RecipeDetails from '../../pages/RecipeDetails';
 import RecipesMain from "../../pages/recipesMain/RecipesMain";
-
+import './app.scss';
 
 const App = () => {
 

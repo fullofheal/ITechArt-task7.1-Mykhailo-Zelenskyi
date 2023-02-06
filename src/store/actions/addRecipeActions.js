@@ -11,6 +11,11 @@ const addRecipeActions = {
                 .catch(e => dispatch(addRecipeActions.addRecipeFetchingError(e)))
         }
 	},
+	addBlank: () => {
+		return {
+			type: 'ADD_BLANK'
+		}
+	},
 	addRecipeFetching: () => {
 		return {
 			type: 'ADD_FETCHING'
@@ -31,6 +36,18 @@ const addRecipeActions = {
 	addToLocal: (data) => {
 		return {
 			type: 'ADD_TO_LOCAL',
+			payload: data
+		}
+	},
+	removeFromLocal: (id) => {
+		return {
+			type: 'REMOVE_FROM_LOCAL',
+			payload: id
+		}
+	},
+	addToDetails: (data) => {
+		return {
+			type: 'ADD_TO_DETAILS',
 			payload: data
 		}
 	}
