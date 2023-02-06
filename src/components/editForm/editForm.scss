@@ -1,6 +1,15 @@
 .form {
+    span {
+        display: none;
+        font-size: 12px;
+        padding: 3px;
+        color: red;
+    }
     input {
         margin: 5px 0;
+        &:invalid ~ span {
+            display: block;
+        }
     }
     button {
         margin: 5px;

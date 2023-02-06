@@ -70,39 +70,47 @@ const EditForm = (props) => {
     const ingredientsList = (ingredients) => {
         return ingredients.map((ingredient, i) => {
             return <div key={`ingredient${i+1}`} className="form__ingredient">
-                <input 
-                    required 
-                    type="text"
-                    name={ingredient[0]}
-                    placeholder="enter ingredient name"
-                    value={details.ingredients.find((item, index) => index === i)[0]}
-                    onChange={(e) => {
-                        setDetails({
-                            ...details,
-                            ingredients: details.ingredients.map((item, index) => {
-                                if (index === i) {
-                                    return [e.target.value, item[1]]
-                                }
-                                return item
+                <div>
+                    <input 
+                        required 
+                        type="text"
+                        name={ingredient[0]}
+                        placeholder="enter ingredient name"
+                        pattern="[A-Za-z- ]+"
+                        value={details.ingredients.find((item, index) => index === i)[0]}
+                        onChange={(e) => {
+                            setDetails({
+                                ...details,
+                                ingredients: details.ingredients.map((item, index) => {
+                                    if (index === i) {
+                                        return [e.target.value, item[1]]
+                                    }
+                                    return item
+                                })
                             })
-                        })
-                    }} />
-                <input 
-                    type="text" 
-                    name={ingredient[0]} 
-                    placeholder="enter the measure" 
-                    value={details.ingredients.find((item, index) => index === i)[1]}
-                    onChange={(e) => {
-                        setDetails({
-                            ...details,
-                            ingredients: details.ingredients.map((item, index) => {
-                                if (index === i) {
-                                    return [item[0], e.target.value]
-                                }
-                                return item
+                        }} />
+                    <span>Only letters</span>
+                </div>
+                <div>
+                    <input 
+                        type="text" 
+                        name={ingredient[0]} 
+                        placeholder="enter the measure" 
+                        pattern="[^#$^&*?><]+"
+                        value={details.ingredients.find((item, index) => index === i)[1]}
+                        onChange={(e) => {
+                            setDetails({
+                                ...details,
+                                ingredients: details.ingredients.map((item, index) => {
+                                    if (index === i) {
+                                        return [item[0], e.target.value]
+                                    }
+                                    return item
+                                })
                             })
-                        })
-                    }} />
+                        }} />
+                    <span>Invalid symbols used</span>
+                </div>
                 <button type="button" onClick={() => deleteIngredient(i)}>
                     Remove
                 </button>
@@ -124,43 +132,55 @@ const EditForm = (props) => {
                 value={details.picture}
                 onChange={(e) => changeImgUrl(e)} />
             </div>
-            <label className="form__label" htmlFor="name">Name</label>
-            <input 
-                required 
-                type="text" 
-                name='name' 
-                value={details.name}
-                placeholder="Recipe name"
-                onChange={(e) => {
-                    setDetails({
-                        ...details,
-                        name: e.target.value
-                    })
-                }}/>
-            <label className="form__label" htmlFor="tags">Tags</label>
-            <input 
-                type="text" 
-                name='tags' 
-                value={details.tags}
-                placeholder="List associated tags"
-                onChange={(e) => {
-                    setDetails({
-                        ...details,
-                        tags: e.target.value
-                    })
-                }}/>
-            <label className="form__label" htmlFor="country">Country of origin</label>
-            <input 
-                type="text" 
-                name='country' 
-                value={details.country}
-                placeholder="List associated tags"
-                onChange={(e) => {
-                    setDetails({
-                        ...details,
-                        country: e.target.value
-                    })
-                }}/>
+            <div>
+                <label className="form__label" htmlFor="name">Name</label>
+                <input 
+                    required 
+                    type="text" 
+                    name='name' 
+                    pattern="[A-Za-z ]+"
+                    value={details.name}
+                    placeholder="Recipe name"
+                    onChange={(e) => {
+                        setDetails({
+                            ...details,
+                            name: e.target.value
+                        })
+                    }}/>
+                <span>Only letters</span>
+            </div>
+            <div>
+                <label className="form__label" htmlFor="tags">Tags</label>
+                <input 
+                    type="text" 
+                    name='tags' 
+                    pattern="[A-Za-z, ]+"
+                    value={details.tags}
+                    placeholder="List associated tags"
+                    onChange={(e) => {
+                        setDetails({
+                            ...details,
+                            tags: e.target.value
+                        })
+                    }}/>
+                <span>Only letters</span>
+            </div>
+            <div>
+                <label className="form__label" htmlFor="country">Country of origin</label>
+                <input 
+                    type="text" 
+                    name='country' 
+                    pattern="[A-Za-z ]+"
+                    value={details.country}
+                    placeholder="List associated tags"
+                    onChange={(e) => {
+                        setDetails({
+                            ...details,
+                            country: e.target.value
+                        })
+                    }}/>
+                <span>Only letters</span>
+            </div>
             <label className="form__label" htmlFor="instructions">Instructions</label>
             <textarea 
                 required
