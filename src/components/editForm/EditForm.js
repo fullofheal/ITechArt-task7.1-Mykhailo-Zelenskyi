@@ -138,7 +138,7 @@ const EditForm = (props) => {
                     required 
                     type="text" 
                     name='name' 
-                    pattern="[A-Za-z ]+"
+                    pattern="[^0-9#$&*?><%@!\/]+"
                     value={details.name}
                     placeholder="Recipe name"
                     onChange={(e) => {
